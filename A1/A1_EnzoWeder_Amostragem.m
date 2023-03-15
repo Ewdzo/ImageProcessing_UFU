@@ -1,6 +1,8 @@
 ogImg = imread('relogio.tif');
 
-targetDpi = 300;
+dpiOptions = [300, 150, 72]
+
+targetDpi = dpiOptions[1];
 dpiRatio = round(1250 / targetDpi);
 
 
