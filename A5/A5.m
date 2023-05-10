@@ -13,8 +13,6 @@ Gxy = zeros(resized);
 Gxx = zeros(resized);
 Gyy = zeros(resized);
 
-#A.*B
-#multiplies every element of A by every element of B
 
 k=1;
 l=1;
