@@ -1,0 +1,63 @@
+1. Para a resolução do exercício 1 foi usado o seguinte código:
+
+pkg load image
+
+img = imread("insitu107595.jpg");
+img = rgb2gray(img);
+
+imhist(img);
+
+segmented = zeros(size(img));
+segmented(img > 235) = 1;
+imshow(segmented);
+
+
+Para as imagens seguintes também foi utilizado o limiar de valor 235, presente na condição "segment(img > 235)". Esse valor foi definido como uma área próxima do meio da interseção entre a frente e o fundo.
+
+
+
+2. Para a resolução do exercício 2 foi usado o seguinte código:
+
+pkg load image
+
+names = ["insitu107595.jpg"; "insitu107596.jpg"; "insitu107597.jpg"; "insitu107598.jpg"; "insitu107599.jpg"; "insitu107600.jpg"; "insitu107601.jpg"; "insitu107602.jpg"];
+imgSrc = cellstr(names);
+
+for i = 1:8
+
+  img = imread(imgSrc{i});
+  img = rgb2gray(img);
+  #img = imfilter(img, fspecial("average", [5,5]));
+  threshold = sum(sum(img))/ (size(img,1) * size(img,2));
+  newThreshold = 0;
+
+  while( abs(newThreshold - threshold) > (0.1*threshold) )
+    G1 = img;
+    G2 = img;
+
+    G1(img > threshold) = 0;
+    G2(img < threshold) = 0;
+
+    G1 = nonzeros(G1);
+    G2 = nonzeros(G2);
+    G1 = sum(G1) / size(G1,1);
+    G2 = sum(G2) / size(G2,1);
+
+    threshold = newThreshold;
+    newThreshold = ((G1+G2) / 2);
+  endwhile
+
+  segmented = zeros(size(img));
+  segmented(img < threshold) = 1;
+
+  subplot(4, 2, (i));
+  imshow(segmented);
+endfor
+
+
+Sim é possível, o valor da limiar com ou sem a suavização sofre uma alteração mínima, isso quando ocorre, no entanto é possível enxergar que com a suavização a porcentagem de objeto que é classificado erroneamente cai consideravelmente.
+
+
+3. A implementação do algoritmo já havia sido analisada e documentada no artigo "An Improved Median-based Otsu Image Thresholding Algorithm" de Xiaolu Yang, Xuanjing Shen, Jianwu Long e Haipeng Chen
+
+4. De acordo com o artigo "An Improved Median-based Otsu Image Thresholding Algorithm" de Xiaolu Yang, Xuanjing Shen, Jianwu Long e Haipeng Chen, o uso de um algoritmo baseado em Otsu com a alteração das medianas mostra uma precisão maior ao apontar o threshold, onde é possível ver uma queda drástica na perda de informações utilizando o novo método, permitindo uma melhor segmentação em ambientes onde com Otsu não seria atingido um resultado satisfatório.
