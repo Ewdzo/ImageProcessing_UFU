@@ -1,11 +1,12 @@
 pkg load image
 
 img = imread("leaf.jpg");
-img = imresize(img, 0.01);
+img = imresize(img, 0.03);
 
 img = padarray(img, [4,4]);
 
 newImg = zeros(size(img));
+skeletonImg = zeros(size(newImg,1), size(newImg,2));
 
 for j=5:(size(img,1) - 4)
   for k=5:(size(img,2) - 4)
@@ -22,7 +23,13 @@ for j=5:(size(img,1) - 4)
   endfor
 endfor
 
+for j=5:(size(newImg,1) - 4)
+  for k=5:(size(newImg,2) - 4)
+        skeletonImg(j,k) = skeletonCandidate(newImg, j,k);
+  endfor
+endfor
+
 
 newImg = uint8(newImg);
-
-imshow(newImg);
+subplot(1,2,1); imshow(newImg);
+subplot(1,2,2); imshow(skeletonImg);
