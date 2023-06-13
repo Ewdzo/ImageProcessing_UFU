@@ -10,14 +10,24 @@ skeletonImg = zeros(size(newImg,1), size(newImg,2));
 
 for j=5:(size(img,1) - 4)
   for k=5:(size(img,2) - 4)
+      if(blueValue < (0.8 * greenValue))
+        newImg(j,k,:) = img(j,k,:);
+      endif
+  endfor
+endfor
+
+img = newImg;
+newImg = zeros(size(img));
+
+for j=5:(size(img,1) - 4)
+  for k=5:(size(img,2) - 4)
       smoothValue = smoothness(img, j, k);
 
       redValue = img(j,k,1);
       greenValue = img(j,k,2);
       blueValue = img(j,k,3);
 
-      #if(smoothValue > 12 && (blueValue < (0.8 * greenValue)))
-      if(blueValue < (0.8 * greenValue))
+      if(smoothValue < 12)
         newImg(j,k,:) = img(j,k,:);
       endif
   endfor
